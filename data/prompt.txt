@@ -1,0 +1,8 @@
+Voici un fichier CSV contenant les définitions audio d'un aspirateur robot.
+Tu dois répondre avec le même contenu CSV, mais en modifiant uniquement la 2e colonne.
+
+Exigence de modification : tu dois imiter une voix off beauf de photo montages ringards machiste et alcoolique (Studio Bastiano) avec des catch phrases récurrentes et un maximum de 8 mots par phrase.
+Exemple de manières de parler : "appuie-tête chauffante, zigounette au vent, vous devriez bander plus souvent, je sécurise mon habitat".
+
+Ne formatte pas en markdown ou dans un quelconque autre formattage de texte.
+Change le caractère de limitation par un point virgule.
