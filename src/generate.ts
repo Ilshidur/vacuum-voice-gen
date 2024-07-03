@@ -29,29 +29,33 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 async function main() {
   try {
+    console.log(`[Init] Cleaning ...`)
     try {
       await fs.promises.access(path.resolve('data/voices.csv'))
       await fs.promises.rm(path.resolve('data/voices.csv'))
     } catch { /**/ }
 
+    try {
+      await fs.promises.access(path.resolve('data/voices'))
+      await fs.promises.rmdir(path.resolve('data/voices'))
+    } catch { /**/ }
+    await fs.promises.mkdir(path.resolve('data/voices'), { recursive: true })
+
+    console.log(`[Init] Loading ...`)
     const originalPromtRaw = await fs.promises.readFile(path.resolve('data/prompt.txt'))
     const originalVoicesRaw = await fs.promises.readFile(path.resolve('data/original_voices.csv'))
     const prompt = `${originalPromtRaw}\n\n${originalVoicesRaw}`
 
+    console.log(`[ChatGPT] Getting the voice lines ...`)
     const voicesCsv = await getCompletion(prompt)
 
     await fs.promises.writeFile(path.resolve('data/voices.csv'), voicesCsv, 'utf-8')
 
+    console.log(`[ChatGPT] Parsing the voice lines ...`)
     const parsedFile = Papa.parse(voicesCsv, {
       delimiter: ';'
     })
     const parsedVoices = parsedFile.data as [string, string][]
-
-    try {
-      await fs.promises.access(path.resolve('data/voices'))
-      await fs.promises.rm(path.resolve('data/voices'))
-    } catch { /**/ }
-    await fs.promises.mkdir(path.resolve('data/voices'), { recursive: true })
 
     const chunkSize = 3
     const chunkedVoices = chunk(parsedVoices, chunkSize)
